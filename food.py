@@ -3,10 +3,17 @@ from tkinter import ttk
 class Food:
     def __init__(self, name):
         self.name = name
+        self.prefered_count = 0
         self.week_cook = 0
         self.month_cook = 0
 
+class Meal:
+    def __init__(self):
+        pass
 
+class FoodApp:
+    def __init__(self):
+        pass
 # authnitcation section :
 window = tk.Tk()
 window.geometry("500x500")
