@@ -52,3 +52,5 @@ class FoodApp:
         meals = self.cursor.fetchall()
         for meal in meals:
             print(meal)
+    def close_database(self):
+        self.connection.close()
