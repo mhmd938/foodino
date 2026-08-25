@@ -6,12 +6,11 @@ from tkinter import ttk
 
 
 class Food:
-    def __init__(self, name, prefere_count):
+    def __init__(self, name, prefere_count, week_cook, month_cook):
         self.name = name
-        self.prefered_count = prefere_count
-        self.week_cook = 0
-        self.month_cook = 0
-
+        self.prefered_count = int(prefere_count)
+        self.week_cook = int(week_cook)
+        self.month_cook = int(month_cook)
 
 class Meal:
     def __init__(self, food, date):
@@ -40,11 +39,21 @@ class FoodApp:
         """)
         self.cursor.execute("""
         CREATE TABLE IF NOT EXISTS foods (
-            id INTEGER PRIMARY KEY,
-            food TEXT NOT NULL
+            name TEXT NOT NULL,
+            prefere_count INTEGER NOT NULL,
+            week_count INTEGER NOT NULL,
+            month_count INTEGER NOT NULL        
         )
         """)
         self.connection.commit()
+
+    def fetch_food(self):
+        self.cursor.execute("SELECT * FROM foods")
+        rows = self.cursor.fetchall()
+        food_objects = []
+        for row in rows:
+            food_objects.append(Food(*row))
+        return food_objects
 
     def save_meal(self, meal:str):
         self.cursor.execute(
