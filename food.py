@@ -38,6 +38,12 @@ class FoodApp:
             meal TEXT NOT NULL
         )
         """)
+        self.cursor.execute("""
+        CREATE TABLE IF NOT EXISTS foods (
+            id INTEGER PRIMARY KEY,
+            food TEXT NOT NULL
+        )
+        """)
         self.connection.commit()
 
     def save_meal(self, meal:str):
@@ -48,9 +54,13 @@ class FoodApp:
         self.connection.commit()
 
     def fetch_meal(self):
+        """Get data from database and retrun a list of Meal objects"""
         self.cursor.execute("SELECT * FROM meals")
-        meals = self.cursor.fetchall()
-        for meal in meals:
-            print(meal)
+        rows = self.cursor.fetchall()
+        string_meals = [row[1] for row in rows]
+        meals = list(map(Meal.str_to_meal, string_meals))
+        return meals
+    
     def close_database(self):
         self.connection.close()
+app = FoodApp()
