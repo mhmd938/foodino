@@ -41,10 +41,17 @@ class FoodApp:
         CREATE TABLE IF NOT EXISTS foods (
             name TEXT NOT NULL,
             prefere_count INTEGER NOT NULL,
-            week_count INTEGER NOT NULL,
-            month_count INTEGER NOT NULL        
+            week_cook INTEGER NOT NULL,
+            month_cook INTEGER NOT NULL       
         )
         """)
+        self.connection.commit()
+
+    def add_food(self, food_name, prefere_count):
+        self.cursor.execute(
+            "INSERT INTO foods (name, prefere_count, week_cook, month_cook) VALUES (?, ?, ?, ?)",
+            (food_name, prefere_count, 0, 0)
+        )
         self.connection.commit()
 
     def fetch_food(self):
@@ -54,8 +61,8 @@ class FoodApp:
         for row in rows:
             food_objects.append(Food(*row))
         return food_objects
-
-    def save_meal(self, meal:str):
+    
+    def add_meal(self, meal:str):
         self.cursor.execute(
             "INSERT INTO meals (meal) VALUES (?)",
             (meal,)
@@ -72,4 +79,3 @@ class FoodApp:
     
     def close_database(self):
         self.connection.close()
-app = FoodApp()
