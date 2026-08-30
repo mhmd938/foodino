@@ -102,4 +102,3 @@ class FoodApp:
 
     def close_database(self):
         self.connection.close()
-        
