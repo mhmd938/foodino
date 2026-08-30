@@ -69,7 +69,7 @@ class FoodApp:
         )
         self.connection.commit()
 
-    def fetch_meal(self):
+    def fetch_meal(self) -> Meal:
         """Get data from database and retrun a list of Meal objects"""
         self.cursor.execute("SELECT * FROM meals")
         rows = self.cursor.fetchall()
@@ -77,5 +77,11 @@ class FoodApp:
         meals = list(map(Meal.str_to_meal, string_meals))
         return meals
     
+    def collect_food_name(self):
+        foods = FoodApp.fetch_food(self)
+        foods_name = list(map(lambda food: food.name, foods))
+        return foods_name
+    
     def close_database(self):
         self.connection.close()
+        
