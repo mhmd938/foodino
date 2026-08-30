@@ -82,6 +82,24 @@ class FoodApp:
         foods_name = list(map(lambda food: food.name, foods))
         return foods_name
     
+    def search_similar_foods(self, searched_food):
+        foods_name = FoodApp.collect_food_name(self)
+        similar = []
+        for food in foods_name:
+            if food == searched_food:
+                similar.append(food)
+        if similar:
+            return similar
+        
+        for food in foods_name:
+            if food[:3] == searched_food[:3] and len(searched_food) - 2 <= len(food) <= len(searched_food) + 2:
+                if not food in similar:
+                    similar.append(food)
+            if len(set(food).intersection(set(searched_food))) >= 4 and len(searched_food) - 2 <= len(food) <= len(searched_food) + 2:
+                if not food in similar:
+                    similar.append(food)
+        return similar
+
     def close_database(self):
         self.connection.close()
         
