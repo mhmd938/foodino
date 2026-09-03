@@ -28,7 +28,11 @@ class Meal:
 
 
 class FoodApp:
-    def __init__(self):
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Food Management")
+        self.root.geometry("900x700")
+        self.root.configure(bg="#982525")
         self.connection = sqlite3.connect("database.db")
         self.cursor = self.connection.cursor()
         self.cursor.execute("""
@@ -46,6 +50,9 @@ class FoodApp:
         )
         """)
         self.connection.commit()
+        # fill in future
+    def setup_ui(self):
+        pass
 
     def add_food(self, food_name, prefere_count):
         self.cursor.execute(
