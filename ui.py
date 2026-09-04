@@ -2,21 +2,29 @@ import tkinter as tk
 from tkinter import ttk
 from food import Food, Meal, FoodApp
 
-class Window:
+class FoodTemplate(tk.Frame):
+    def __init__(self, parent):
+        super().__init__(master=parent)
+        tk.Label(self, text="food name").pack()
+
+
+class Window(tk.Tk):
     def __init__(self):
-        self.root = tk.Tk()
-        self.root.title("main_page")
-        self.root.geometry("400x400")
-        self.label = ttk.Label(self.root, text="hello")
+        super().__init__()
+        self.title("main_page")
+        self.geometry("400x400")
+        self.label = ttk.Label(self, text="hello")
         self.label.pack(pady=20)
-        self.button = ttk.Button(self.root, text="click", command=self.on_click)
+        self.button = ttk.Button(self, text="click", command=self.on_click)
         self.button.pack(pady=10)
+        self.food_frame = FoodTemplate(self)
+        self.food_frame.pack()
     
     def on_click(self):
         self.label.config(text="clicked")
     
     def run(self):
-        self.root.mainloop()
+        self.mainloop()
 
 def main():
     main_window = Window()
