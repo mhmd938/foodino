@@ -7,6 +7,10 @@ class FoodTemplate(tk.Frame):
         super().__init__(master=parent, bg="yellow")
         self.food_label = tk.Label(self, text="food name")
         self.food_label.pack()
+        self.food_entry = tk.Entry(self)
+        self.food_add_button = tk.Button(self, text="add")
+        self.food_entry.pack()
+        self.food_add_button.pack()
 
 
 class MealTemplate(tk.Frame):
@@ -37,9 +41,9 @@ class Window(tk.Tk):
         self.geometry("1200x800")
         self.resizable(width=False, height=False)
         self.food_frame = FoodTemplate(self)
-        self.food_frame.grid(row=1, column=1, sticky="nsew")
+        self.food_frame.grid(row=1, column=0, sticky="nsew")
         self.meal_frame = MealTemplate(self)
-        self.meal_frame.grid(row=1,column=0, sticky="nsew")
+        self.meal_frame.grid(row=1,column=1, sticky="nsew")
         self.chart_frame = ChartTemplate(self)
         self.chart_frame.grid(row=0, column=0, sticky="nsew", columnspan=3)
         self.suggestion_frame = SuggestionTemplate(self)
