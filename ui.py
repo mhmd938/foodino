@@ -2,16 +2,21 @@ import tkinter as tk
 from tkinter import ttk
 from food import Food, Meal, FoodApp
 
+food_app = FoodApp()
+
 class FoodTemplate(tk.Frame):
-    def __init__(self, parent):
+    def __init__(self, parent, foodapp = food_app):
         super().__init__(master=parent, bg="yellow")
         self.food_label = tk.Label(self, text="food name")
         self.food_label.pack()
         self.food_entry = tk.Entry(self)
-        self.food_add_button = tk.Button(self, text="add")
+        self.food_add_button = tk.Button(self, text="add", command=self.get_food_name )
         self.food_entry.pack()
         self.food_add_button.pack()
-
+        self.foodapp = foodapp
+    def get_food_name(self):
+        food_name = self.food_entry.get()
+        self.foodapp.add_food(food_name)
 
 class MealTemplate(tk.Frame):
     def __init__(self, parent):
