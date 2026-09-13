@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
 from food import Food, Meal, FoodApp
 
 food_app = FoodApp()
@@ -10,13 +11,21 @@ class FoodTemplate(tk.Frame):
         self.food_label = tk.Label(self, text="food name")
         self.food_label.pack()
         self.food_entry = tk.Entry(self)
-        self.food_add_button = tk.Button(self, text="add", command=self.get_food_name )
+        self.food_add_button = tk.Button(self, text="add", command=self.add_food_button )
         self.food_entry.pack()
         self.food_add_button.pack()
         self.foodapp = foodapp
-    def get_food_name(self):
+        
+    def add_food_button(self):
         food_name = self.food_entry.get()
-        self.foodapp.add_food(food_name)
+        similars = food_app.search_similar_foods(food_name)
+        if similars:
+            result = messagebox.askyesno("Save", f"{similars} are currently in the database.Do you want to add this one as well?")
+            if result:
+                self.foodapp.add_food(food_name)
+        else:
+            self.foodapp.add_food(food_name)
+
 
 class MealTemplate(tk.Frame):
     def __init__(self, parent):
