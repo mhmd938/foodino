@@ -5,13 +5,19 @@ from food import Food, Meal, FoodApp
 
 food_app = FoodApp()
 
+
+class FoodAppButton(tk.Button):
+    def __init__(self, master = None, text="", command=""):
+        super().__init__(master, bg="white", width=9, height=1, text=text, cursor="hand2", command=command, border=1, relief="solid", fg="black")
+
+
 class FoodTemplate(tk.Frame):
     def __init__(self, parent, foodapp = food_app):
         super().__init__(master=parent, bg="yellow")
         self.food_label = tk.Label(self, text="food name")
         self.food_label.pack()
         self.food_entry = tk.Entry(self)
-        self.food_add_button = tk.Button(self, text="add", command=self.add_food_button )
+        self.food_add_button = FoodAppButton(master=self, text="add", command=self.add_food_button)
         self.food_entry.pack()
         self.food_add_button.pack()
         self.foodapp = foodapp
