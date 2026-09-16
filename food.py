@@ -22,7 +22,7 @@ class Meal:
     
     @classmethod
     def str_to_meal(cls, string):
-        food_att = (re.findall(r"(\w*),", string))[0]
+        food_att = (re.findall(r"([a-zA-Z ]*),", string))[0]
         date_att = (re.findall(r",(\d*-\d*-\d*)", string))[0]
         return cls(food_att, date_att)
 
@@ -51,6 +51,19 @@ class FoodApp:
         """)
         self.connection.commit()
 
+    def update_foods_cooks(self):
+        food_names = FoodApp.collect_food_name(self)
+        for food in food_names:
+            food_week_cook = FoodApp.get_food_week_cook(self, food)
+            food_month_cook = FoodApp.get_food_month_cook(self, food)
+
+            self.cursor.execute(f"""
+            UPDATE foods
+            SET week_cook = ?, month_cook = ?
+            WHERE name = ?
+            """, (food_week_cook, food_month_cook, food))
+            self.connection.commit()
+
     def get_food_month_cook(self, food_name):
         """
             Return month_cook attribute for Food class
@@ -61,8 +74,6 @@ class FoodApp:
         def is_it_for_last_month(meal):
             meal_date = datetime.strptime(meal.date, "%Y-%m-%d").date()
             delta = (datetime.now().date() - meal_date).days
-            print(meal_date)
-            print(delta)
             if delta > 31:
                 return False
             else:
@@ -83,8 +94,6 @@ class FoodApp:
         def is_it_for_last_week(meal):
             meal_date = datetime.strptime(meal.date, "%Y-%m-%d").date()
             delta = (datetime.now().date() - meal_date).days
-            print(meal_date)
-            print(delta)
             if delta > 7:
                 return False
             else:
@@ -151,6 +160,3 @@ class FoodApp:
     def close_database(self):
         self.connection.close()
 
-x = FoodApp()
-for i in x.get_food_month_cook("gheyeme"):
-    print(i)

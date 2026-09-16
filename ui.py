@@ -119,6 +119,7 @@ class MealTemplate(tk.Frame):
             return
 
         meal_str = f"{food_name},{date_str}"
+        self.foodapp.update_foods_cooks()
         self.foodapp.add_meal(meal_str)
         self.refresh_meal_list()
         self.food_var.set("")
