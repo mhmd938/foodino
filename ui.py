@@ -47,6 +47,9 @@ class FoodTemplate(tk.Frame):
             messagebox.showwarning("Warning", "Please enter a food name.")
             return
         similars = food_app.search_similar_foods(food_name)
+        if food_name in similars:
+            messagebox.showwarning("Error", "Can't add duplicate food")
+            return
         if similars:
             result = messagebox.askyesno(
                 "Save",
