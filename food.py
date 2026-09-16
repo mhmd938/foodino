@@ -51,6 +51,50 @@ class FoodApp:
         """)
         self.connection.commit()
 
+    def get_food_month_cook(self, food_name):
+        """
+            Return month_cook attribute for Food class
+        """
+        def is_it_target_meal(meal):
+            return meal.food == food_name 
+        
+        def is_it_for_last_month(meal):
+            meal_date = datetime.strptime(meal.date, "%Y-%m-%d").date()
+            delta = (datetime.now().date() - meal_date).days
+            print(meal_date)
+            print(delta)
+            if delta > 31:
+                return False
+            else:
+                return True
+        meals = FoodApp.fetch_meal(self)
+        target_meals = list(filter(is_it_target_meal, meals))
+        month_meals = list(filter(is_it_for_last_month, target_meals))
+        
+        return len(month_meals)
+    
+    def get_food_week_cook(self, food_name):
+        """
+            Return week_cook attribute for Food class
+        """
+        def is_it_target_meal(meal):
+            return meal.food == food_name 
+        
+        def is_it_for_last_week(meal):
+            meal_date = datetime.strptime(meal.date, "%Y-%m-%d").date()
+            delta = (datetime.now().date() - meal_date).days
+            print(meal_date)
+            print(delta)
+            if delta > 7:
+                return False
+            else:
+                return True
+        meals = FoodApp.fetch_meal(self)
+        target_meals = list(filter(is_it_target_meal, meals))
+        week_meals = list(filter(is_it_for_last_week, target_meals))
+        
+        return len(week_meals)
+    
     def add_food(self, food_name, prefere_count = 0):
         self.cursor.execute(
             "INSERT INTO foods (name, prefere_count, week_cook, month_cook) VALUES (?, ?, ?, ?)",
@@ -106,3 +150,7 @@ class FoodApp:
 
     def close_database(self):
         self.connection.close()
+
+x = FoodApp()
+for i in x.get_food_month_cook("gheyeme"):
+    print(i)
