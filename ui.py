@@ -15,8 +15,9 @@ class FoodAppButton(tk.Button):
 
 
 class FoodTemplate(tk.Frame):
-    def __init__(self, parent, foodapp=food_app):
+    def __init__(self, window, parent, foodapp=food_app):
         super().__init__(master=parent, bg="yellow")
+        self.window = window
         self.foodapp = foodapp
         self.food_label = tk.Label(self, text="food name", bg="yellow")
         self.food_label.pack(pady=(10, 0))
@@ -53,9 +54,11 @@ class FoodTemplate(tk.Frame):
             )
             if result:
                 self.foodapp.add_food(food_name)
+                self.window.refresh_combo_food()
                 self.refresh_food_list()
         else:
             self.foodapp.add_food(food_name)
+            self.window.refresh_combo_food()
             self.refresh_food_list()
         self.food_entry.delete(0, tk.END)
 
@@ -203,7 +206,7 @@ class Window(tk.Tk):
         self.geometry("1200x800")
         self.resizable(width=False, height=False)
 
-        self.food_frame = FoodTemplate(self)
+        self.food_frame = FoodTemplate(parent=self, window=self)
         self.food_frame.grid(row=1, column=0, sticky="nsew")
         self.meal_frame = MealTemplate(self)
         self.meal_frame.grid(row=1, column=1, sticky="nsew")
@@ -217,6 +220,9 @@ class Window(tk.Tk):
         self.columnconfigure(2, weight=1)
         self.rowconfigure(0, weight=3)
         self.rowconfigure(1, weight=2)
+
+    def refresh_combo_food(self):
+        self.meal_frame.food_combo["values"] = food_app.collect_food_name()
 
     def run(self):
         self.mainloop()
