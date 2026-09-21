@@ -67,10 +67,10 @@ class FoodTemplate(tk.Frame):
 
 
 class MealTemplate(tk.Frame):
-    def __init__(self, parent, foodapp=food_app):
+    def __init__(self,window, parent, foodapp=food_app):
         super().__init__(master=parent, bg="green")
         self.foodapp = foodapp
-
+        self.window = window
         # --- فرم افزودن وعده ---
         self.meal_label = tk.Label(self, text="meal name", bg="green")
         self.meal_label.pack(pady=(10, 0))
@@ -122,6 +122,7 @@ class MealTemplate(tk.Frame):
         self.foodapp.add_meal(meal_str)
         self.foodapp.update_foods_cooks()
         self.refresh_meal_list()
+        self.window.refresh_food_chart()
         self.food_var.set("")
 
 
@@ -139,11 +140,6 @@ class ChartTemplate(tk.Frame):
         self.monthButton.pack(side="right")
         self.canvas = tk.Canvas(self, bg="white", height=250)
         self.canvas.pack(fill="both", expand=True, padx=20, pady=10)
-
-        self.refresh_button = FoodAppButton(master=self, text="refresh",
-                                            command=self.draw_chart)
-        self.refresh_button.pack(pady=5)
-
         self.draw_chart("week")
 
     def draw_chart(self, period):
@@ -239,7 +235,7 @@ class Window(tk.Tk):
 
         self.food_frame = FoodTemplate(parent=self, window=self)
         self.food_frame.grid(row=1, column=0, sticky="nsew")
-        self.meal_frame = MealTemplate(self)
+        self.meal_frame = MealTemplate(parent=self, window=self)
         self.meal_frame.grid(row=1, column=1, sticky="nsew")
         self.chart_frame = ChartTemplate(self)
         self.chart_frame.grid(row=0, column=0, sticky="nsew", columnspan=3)
@@ -254,6 +250,9 @@ class Window(tk.Tk):
 
     def refresh_combo_food(self):
         self.meal_frame.food_combo["values"] = food_app.collect_food_name()
+
+    def refresh_food_chart(self):
+        self.chart_frame.draw_chart("week")
 
     def run(self):
         self.mainloop()
