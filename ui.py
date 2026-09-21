@@ -133,7 +133,10 @@ class ChartTemplate(tk.Frame):
         self.chart_label = tk.Label(self, text="Chart - Food Preference",
                                     bg="red", font=("Arial", 12, "bold"))
         self.chart_label.pack(pady=10)
-
+        self.weekButton = FoodAppButton(master=self, text="week", command=lambda : self.draw_chart("week"))
+        self.monthButton = FoodAppButton(master=self, text="month", command=lambda : self.draw_chart("month"))
+        self.weekButton.pack(side="left")
+        self.monthButton.pack(side="right")
         self.canvas = tk.Canvas(self, bg="white", height=250)
         self.canvas.pack(fill="both", expand=True, padx=20, pady=10)
 
@@ -141,33 +144,57 @@ class ChartTemplate(tk.Frame):
                                             command=self.draw_chart)
         self.refresh_button.pack(pady=5)
 
-        self.draw_chart()
+        self.draw_chart("week")
 
-    def draw_chart(self):
-        self.canvas.delete("all")
-        foods = self.foodapp.fetch_food()
-        if not foods:
-            self.canvas.create_text(200, 100, text="No data available",
-                                    fill="gray")
-            return
+    def draw_chart(self, period):
+        if period == "week":
+            self.canvas.delete("all")
+            foods = self.foodapp.fetch_food()
+            if not foods:
+                self.canvas.create_text(200, 100, text="No data available",
+                                        fill="gray")
+                return
 
-        max_count = max(food.week_cook for food in foods) or 1
-        bar_width = 40
-        gap = 20
-        x = 40
-        base_y = 220
+            max_count = max(food.week_cook for food in foods) or 1
+            bar_width = 40
+            gap = 20
+            x = 40
+            base_y = 220
 
-        for food in foods:
-            height = (food.week_cook / max_count) * 180
-            self.canvas.create_rectangle(x, base_y - height,
-                                         x + bar_width, base_y,
-                                         fill="steelblue")
-            self.canvas.create_text(x + bar_width / 2, base_y - height - 10,
-                                    text=str(food.week_cook))
-            self.canvas.create_text(x + bar_width / 2, base_y + 10,
-                                    text=food.name, angle=45)
-            x += bar_width + gap
+            for food in foods:
+                height = (food.week_cook / max_count) * 180
+                self.canvas.create_rectangle(x, base_y - height,
+                                            x + bar_width, base_y,
+                                            fill="steelblue")
+                self.canvas.create_text(x + bar_width / 2, base_y - height - 10,
+                                        text=str(food.week_cook))
+                self.canvas.create_text(x + bar_width / 2, base_y + 10,
+                                        text=food.name, angle=45)
+                x += bar_width + gap
+        elif period == "month":
+            self.canvas.delete("all")
+            foods = self.foodapp.fetch_food()
+            if not foods:
+                self.canvas.create_text(200, 100, text="No data available",
+                                        fill="gray")
+                return
 
+            max_count = max(food.month_cook for food in foods) or 1
+            bar_width = 40
+            gap = 20
+            x = 40
+            base_y = 220
+
+            for food in foods:
+                height = (food.month_cook / max_count) * 180
+                self.canvas.create_rectangle(x, base_y - height,
+                                            x + bar_width, base_y,
+                                            fill="steelblue")
+                self.canvas.create_text(x + bar_width / 2, base_y - height - 10,
+                                        text=str(food.month_cook))
+                self.canvas.create_text(x + bar_width / 2, base_y + 10,
+                                        text=food.name, angle=45)
+                x += bar_width + gap
 
 class SuggestionTemplate(tk.Frame):
     def __init__(self, parent, foodapp=food_app):
