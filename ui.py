@@ -119,8 +119,8 @@ class MealTemplate(tk.Frame):
             return
 
         meal_str = f"{food_name},{date_str}"
-        self.foodapp.update_foods_cooks()
         self.foodapp.add_meal(meal_str)
+        self.foodapp.update_foods_cooks()
         self.refresh_meal_list()
         self.food_var.set("")
 
@@ -151,19 +151,19 @@ class ChartTemplate(tk.Frame):
                                     fill="gray")
             return
 
-        max_count = max(f.prefered_count for f in foods) or 1
+        max_count = max(food.week_cook for food in foods) or 1
         bar_width = 40
         gap = 20
         x = 40
         base_y = 220
 
         for food in foods:
-            height = (food.prefered_count / max_count) * 180
+            height = (food.week_cook / max_count) * 180
             self.canvas.create_rectangle(x, base_y - height,
                                          x + bar_width, base_y,
                                          fill="steelblue")
             self.canvas.create_text(x + bar_width / 2, base_y - height - 10,
-                                    text=str(food.prefered_count))
+                                    text=str(food.week_cook))
             self.canvas.create_text(x + bar_width / 2, base_y + 10,
                                     text=food.name, angle=45)
             x += bar_width + gap
